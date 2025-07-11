@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Show working directory and files
+        run: |
+          pwd
+          ls -l
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
