@@ -1,0 +1,31 @@
+name: Flutter Android CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Install NDK and CMake
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake
+          yes | sdkmanager --install "ndk;25.2.9519653"
+      - name: Build APK (debug)
+        run: flutter build apk --debug
+      - name: Build APK (release)
+        run: flutter build apk --release
+      - name: Upload APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: APKs
+          path: build/app/outputs/flutter-apk/*.apk
